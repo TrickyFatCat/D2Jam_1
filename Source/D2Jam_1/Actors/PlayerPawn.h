@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerPawn.generated.h"
 
+enum class EGameInactivityReason : uint8;
 class UHitPointsComponent;
 class UFloatingPawnMovement;
 
@@ -61,6 +62,15 @@ protected:
 	                     const UDamageType* DamageType,
 	                     AController* InstigatedBy,
 	                     AActor* DamageCauser);
+
+	UFUNCTION()
+	void HandleHitPointsReachedZero(UHitPointsComponent* Component);
+
+	UFUNCTION()
+	void HandleGameStarted();
+
+	UFUNCTION()
+	void HandleGameStopped(EGameInactivityReason InactivityReason);
 
 private:
 	UPROPERTY()
