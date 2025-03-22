@@ -7,6 +7,7 @@
 #include "D2Jam_1/Misc/PlanetColors.h"
 #include "PlanetBase.generated.h"
 
+class UPassengersGeneratorComponent;
 class USphereComponent;
 class UGameplayObjectStateControllerComponent;
 
@@ -37,9 +38,12 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USphereComponent> TriggerComponent = nullptr;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UPassengersGeneratorComponent> PassengersGeneratorComponent = nullptr;
+
 	UPROPERTY(VisibleInstanceOnly, Category="Planet")
 	UPlanetColors* PlanetColors = nullptr;
-	
+
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Planet")
 	EPlanetColor PlanetColor = EPlanetColor::Red;
 
@@ -54,4 +58,8 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Planet")
 	void HandlePlanetRandomized();
+
+	virtual void HandleStateChanged(UGameplayObjectStateControllerComponent* Component,
+	                                EGameplayObjectState NewState,
+	                                bool bChangedImmediately) override;
 };
