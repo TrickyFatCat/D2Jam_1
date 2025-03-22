@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerPawn.generated.h"
 
+class UPassengersCounterComponent;
 enum class EGameInactivityReason : uint8;
 class UHitPointsComponent;
 class UFloatingPawnMovement;
@@ -46,6 +47,9 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USceneComponent> Root = nullptr;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UPassengersCounterComponent> PassengersCounterComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintGetter=GetRotationSpeed, Category = "Movement")
 	float RotationSpeed = 180.f;

@@ -7,6 +7,8 @@
 #include "TrickyGameModeLibrary.h"
 #include "D2Jam_1/JamUtils.h"
 #include "D2Jam_1/Components/HitPointsComponent.h"
+#include "D2Jam_1/Components/PassengersCounterComponent.h"
+#include "D2Jam_1/Components/PassengersGeneratorComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -19,6 +21,7 @@ APlayerPawn::APlayerPawn()
 
 	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
 	HitPointsComponent = CreateDefaultSubobject<UHitPointsComponent>(TEXT("HitPointsComponent"));
+	PassengersCounterComponent = CreateDefaultSubobject<UPassengersCounterComponent>(TEXT("PassengersCounterComponent"));
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	SetRootComponent(Root);
