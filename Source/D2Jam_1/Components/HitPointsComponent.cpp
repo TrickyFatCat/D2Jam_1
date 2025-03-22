@@ -10,6 +10,7 @@
 UHitPointsComponent::UHitPointsComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	bWantsInitializeComponent = true;
 }
 
 void UHitPointsComponent::InitializeComponent()
