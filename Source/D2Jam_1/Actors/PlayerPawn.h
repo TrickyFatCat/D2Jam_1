@@ -27,6 +27,15 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintGetter)
+	float GetRotationSpeed() const { return RotationSpeed; }
+
+	UFUNCTION(BlueprintGetter)
+	FVector GetDesiredDirection() const { return DesiredDirection; }
+
+	UFUNCTION(BlueprintGetter)
+	FVector GetMouseWorldPosition() const { return MouseWorldPosition; }
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UFloatingPawnMovement> MovementComponent = nullptr;
@@ -37,11 +46,27 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USceneComponent> Root = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter=GetRotationSpeed, Category = "Movement")
+	float RotationSpeed = 180.f;
+	
+	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetDesiredDirection, Category="Movement")
+	FVector DesiredDirection = FVector::ZeroVector;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetMouseWorldPosition, Category="Movement")
+	FVector MouseWorldPosition = FVector::ZeroVector;
+
 	UFUNCTION()
 	void HandleAnyDamage(AActor* DamagedActor,
 	                     float Damage,
 	                     const UDamageType* DamageType,
 	                     AController* InstigatedBy,
 	                     AActor* DamageCauser);
+
+private:
+	UPROPERTY()
+	APlayerController* PlayerController = nullptr;
+
+	UPROPERTY()
+	APlayerCameraManager* CameraManager = nullptr;
 };
 
