@@ -43,6 +43,8 @@ void APlanetsManager::BeginPlay()
 		Planet->SetPlanetColors(PlanetColors);
 	}
 
+	ResetPlanetsState();
+
 	ATrickyGameModeBase* GameMode = UTrickyGameModeLibrary::GetTrickyGameMode(this);
 
 	if (IsValid(GameMode))
@@ -57,13 +59,13 @@ void APlanetsManager::RandomizePlanets()
 	{
 		return;
 	}
-	
+
 	if (IsValid(PlanetColors))
 	{
 		TMap<EPlanetColor, FLinearColor> Colors = PlanetColors->Colors;
 		TArray<EPlanetColor> ColorsKeys;
 		Colors.GetKeys(ColorsKeys);
-		
+
 		Algo::RandomShuffle(Planets);
 
 		for (int32 i = 0; i < Planets.Num(); ++i)
@@ -94,4 +96,43 @@ inline void APlanetsManager::HandleGameStopped(EGameInactivityReason InactivityR
 	}
 
 	RandomizePlanets();
+	ResetPlanetsState();
+}
+
+bool APlanetsManager::ActivateNextPlanet()
+{
+	if (CurrentActivePlanetsNum >= Planets.Num())
+	{
+		return false;
+	}
+
+	CurrentActivePlanetsNum++;
+	APlanetBase* Planet = Planets[CurrentActivePlanetsNum - 1];
+
+	if (!IsValid(Planet))
+	{
+		return false;
+	}
+	return IGameplayObjectInterface::Execute_ActivateGameplayObject(Planet, true);
+}
+
+void APlanetsManager::ResetPlanetsState()
+{
+	CurrentActivePlanetsNum = InitialActivePlanetsNum;
+
+	Algo::RandomShuffle(Planets);
+	for (int32 i = 0; i < Planets.Num(); ++i)
+	{
+		APlanetBase* Planet = Planets[i];
+
+		if (!IsValid(Planet))
+		{
+			continue;
+		}
+
+		const EGameplayObjectState NewState = i < CurrentActivePlanetsNum
+			                                      ? EGameplayObjectState::Active
+			                                      : EGameplayObjectState::Inactive;
+		IGameplayObjectInterface::Execute_ForceGameplayObjectState(Planet, NewState, true);
+	}
 }
