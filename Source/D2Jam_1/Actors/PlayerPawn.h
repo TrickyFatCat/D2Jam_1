@@ -68,5 +68,8 @@ private:
 
 	UPROPERTY()
 	APlayerCameraManager* CameraManager = nullptr;
+
+	UFUNCTION()
+	void RotateTowardsCursor(const float DeltaTime);
 };
 

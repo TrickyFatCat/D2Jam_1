@@ -40,16 +40,7 @@ void APlayerPawn::Tick(float DeltaTime)
 
 	if (IsValid(MovementComponent))
 	{
-		UJamUtils::ProjectMouseToWorld(PlayerController, CameraManager, 100000.f, MouseWorldPosition);
-		MouseWorldPosition.Z = 0.f;
-		FVector ActorPosition = GetActorLocation();
-		ActorPosition.Z = 0.f;
-		DesiredDirection = UKismetMathLibrary::GetDirectionUnitVector(ActorPosition, MouseWorldPosition);
-		FRotator NewRotation = UKismetMathLibrary::RInterpTo_Constant(GetActorRotation(),
-		                                                              DesiredDirection.Rotation(),
-		                                                              DeltaTime,
-		                                                              RotationSpeed);
-		SetActorRotation(NewRotation);
+		RotateTowardsCursor(DeltaTime);
 		MovementComponent->AddInputVector(GetActorForwardVector());
 	}
 }
@@ -69,4 +60,18 @@ void APlayerPawn::HandleAnyDamage(AActor* DamagedActor,
 	{
 		HitPointsComponent->DecreaseHitPoints(Damage);
 	}
+}
+
+void APlayerPawn::RotateTowardsCursor(const float DeltaTime)
+{
+	UJamUtils::ProjectMouseToWorld(PlayerController, CameraManager, 100000.f, MouseWorldPosition);
+	MouseWorldPosition.Z = 0.f;
+	FVector ActorPosition = GetActorLocation();
+	ActorPosition.Z = 0.f;
+	DesiredDirection = UKismetMathLibrary::GetDirectionUnitVector(ActorPosition, MouseWorldPosition);
+	FRotator NewRotation = UKismetMathLibrary::RInterpTo_Constant(GetActorRotation(),
+	                                                              DesiredDirection.Rotation(),
+	                                                              DeltaTime,
+	                                                              RotationSpeed);
+	SetActorRotation(NewRotation);
 }
