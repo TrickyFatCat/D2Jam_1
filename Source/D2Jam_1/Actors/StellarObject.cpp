@@ -3,6 +3,7 @@
 
 #include "StellarObject.h"
 
+#include "GameplayObject/GameplayObjectStateControllerComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -12,6 +13,8 @@ AStellarObject::AStellarObject()
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	SetRootComponent(MeshComponent);
+
+	StateComponent = CreateDefaultSubobject<UGameplayObjectStateControllerComponent>(TEXT("StateComponent"));
 }
 
 void AStellarObject::BeginPlay()

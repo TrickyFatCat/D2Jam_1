@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "StellarObject.generated.h"
 
+class UGameplayObjectStateControllerComponent;
+
 UCLASS()
 class D2JAM_1_API AStellarObject : public AActor
 {
@@ -23,6 +25,9 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> MeshComponent = nullptr;
+	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UGameplayObjectStateControllerComponent> StateComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "StellarObject")
 	int ImpactDamage = 1;
