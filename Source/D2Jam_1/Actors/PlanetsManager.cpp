@@ -33,6 +33,16 @@ void APlanetsManager::BeginPlay()
 
 	RandomizePlanets();
 
+	for (APlanetBase* Planet : Planets)
+	{
+		if (!IsValid(Planet))
+		{
+			continue;
+		}
+
+		Planet->SetPlanetColors(PlanetColors);
+	}
+
 	ATrickyGameModeBase* GameMode = UTrickyGameModeLibrary::GetTrickyGameMode(this);
 
 	if (IsValid(GameMode))

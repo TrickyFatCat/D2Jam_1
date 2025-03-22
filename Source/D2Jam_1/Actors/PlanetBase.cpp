@@ -28,6 +28,11 @@ void APlanetBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void APlanetBase::SetPlanetColors(UPlanetColors* NewPlanetColors)
+{
+	PlanetColors = NewPlanetColors;
+}
+
 void APlanetBase::SetPlanetColor(const EPlanetColor NewPlanetColor, const FLinearColor NewColor)
 {
 	PlanetColor = NewPlanetColor;

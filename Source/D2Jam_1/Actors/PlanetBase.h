@@ -24,6 +24,9 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void SetPlanetColors(UPlanetColors* NewPlanetColors);
+
 	UFUNCTION(BlueprintCallable, Category = "Planet")
 	void SetPlanetColor(EPlanetColor NewPlanetColor, FLinearColor NewColor);
 
@@ -33,6 +36,9 @@ public:
 protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USphereComponent> TriggerComponent = nullptr;
+
+	UPROPERTY(VisibleInstanceOnly, Category="Planet")
+	UPlanetColors* PlanetColors = nullptr;
 	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Planet")
 	EPlanetColor PlanetColor = EPlanetColor::Red;
