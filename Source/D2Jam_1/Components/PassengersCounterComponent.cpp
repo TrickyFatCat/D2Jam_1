@@ -15,6 +15,7 @@ UPassengersCounterComponent::UPassengersCounterComponent()
 void UPassengersCounterComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
+	ResetCounter();
 }
 
 bool UPassengersCounterComponent::IncreasePassengerCapacity(const int32 Amount)
