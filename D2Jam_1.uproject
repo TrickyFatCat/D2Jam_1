@@ -289,6 +289,18 @@
 				"Linux",
 				"Mac"
 			]
+		},
+		{
+			"Name": "TrickyGameMode",
+			"Enabled": true
+		},
+		{
+			"Name": "TrickyGameplayObjects",
+			"Enabled": true
+		},
+		{
+			"Name": "TrickyProperties",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
