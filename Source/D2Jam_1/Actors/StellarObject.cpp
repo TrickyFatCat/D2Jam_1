@@ -11,8 +11,11 @@ AStellarObject::AStellarObject()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(Root);
+	
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	SetRootComponent(MeshComponent);
+	MeshComponent->SetupAttachment(GetRootComponent());
 
 	StateComponent = CreateDefaultSubobject<UGameplayObjectStateControllerComponent>(TEXT("StateComponent"));
 }

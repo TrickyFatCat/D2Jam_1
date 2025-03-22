@@ -24,6 +24,9 @@ public:
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<USceneComponent> Root = nullptr;
+	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> MeshComponent = nullptr;
 	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
