@@ -18,25 +18,42 @@ void UPassengersCounterComponent::InitializeComponent()
 	ResetCounter();
 }
 
-bool UPassengersCounterComponent::IncreasePassengerCapacity(const int32 Amount)
+bool UPassengersCounterComponent::AddPassenger(const EPlanetColor Passenger)
 {
-	if (!UTrickyPropertiesLibrary::IncreaseValueInt(PassengerCapacity, Amount))
+	if (Passengers.Num() >= PassengersCapacity)
 	{
 		return false;
 	}
 
-	UTrickyPropertiesLibrary::ClampToMaxInt(PassengerCapacity);
+	Passengers.Add(Passenger);
 	return true;
 }
 
-bool UPassengersCounterComponent::IncreasePassengerMaxCapacity(const int32 Amount)
+bool UPassengersCounterComponent::RemovePassengers(const EPlanetColor Passenger)
 {
-	return UTrickyPropertiesLibrary::IncreaseMaxValueInt(PassengerCapacity, Amount);
+	if (Passengers.IsEmpty() || !Passengers.Contains(Passenger))
+	{
+		return false;
+	}
+
+	const int32 RemovePassengersNum = Passengers.Remove(Passenger);
+	TotalPassengers += RemovePassengersNum;
+	return true;
 }
 
+bool UPassengersCounterComponent::IncreasePassengerCapacity(const int32 Amount)
+{
+	if (Amount <= 0)
+	{
+		return false;
+	}
+
+	PassengersCapacity += Amount;
+	return true;
+}
 
 void UPassengersCounterComponent::ResetCounter()
 {
-	PassengerCapacity = DefaultPassengerCapacity;
+	PassengersCapacity = DefaultPassengersCapacity;
 	TotalPassengers = 0;
 }
