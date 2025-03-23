@@ -25,6 +25,15 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Planet")
+	TMap<EPlanetColor, UMaterialInterface*> PlanetMaterials{
+		{EPlanetColor::Red, nullptr},
+		{EPlanetColor::Yellow, nullptr},
+		{EPlanetColor::Green, nullptr},
+		{EPlanetColor::Indigo, nullptr},
+		{EPlanetColor::Purple, nullptr}
+	};
+
 	UFUNCTION()
 	void SetPlanetColors(UPlanetColors* NewPlanetColors);
 
