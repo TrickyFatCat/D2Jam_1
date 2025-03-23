@@ -53,6 +53,14 @@ void APlanetBase::SetPlanetColor(const EPlanetColor NewPlanetColor, const FLinea
 	{
 		PassengersGeneratorComponent->SetExcludedColor(PlanetColor);
 	}
+
+	if (!IsValid(MeshComponent))
+	{
+		return;
+	}
+
+	UMaterialInterface* NewMaterial = *PlanetMaterials.Find(PlanetColor);
+	MeshComponent->SetMaterial(0, NewMaterial);
 }
 
 void APlanetBase::RandomizePlanet()
