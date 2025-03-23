@@ -301,6 +301,10 @@
 		{
 			"Name": "TrickyProperties",
 			"Enabled": true
+		},
+		{
+			"Name": "TrickyUserInterface",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
