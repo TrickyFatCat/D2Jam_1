@@ -107,7 +107,7 @@ bool APlanetsManager::ActivateNextPlanet()
 		return false;
 	}
 
-	APlanetBase* NextPlanet = Planets[CurrentActivePlanetsNum - 1];
+	APlanetBase* NextPlanet = Planets[CurrentActivePlanetsNum];
 
 	if (!IsValid(NextPlanet) || !IGameplayObjectInterface::Execute_ActivateGameplayObject(NextPlanet, true))
 	{
