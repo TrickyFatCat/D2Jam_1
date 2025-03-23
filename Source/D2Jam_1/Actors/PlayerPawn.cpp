@@ -117,6 +117,7 @@ void APlayerPawn::HandleGameStopped(EGameInactivityReason InactivityReason)
 	HitPointsComponent->ResetHitPointsToMax();
 	PassengersCounterComponent->ResetPassengers();
 	SetActorTransform(FTransform::Identity);
+	HandleTotalPassengersIncreased(PassengersCounterComponent, 0);
 }
 
 void APlayerPawn::HandleGameFinished(EGameResult GameResult)
