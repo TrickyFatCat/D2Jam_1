@@ -3,24 +3,23 @@
 
 #include "SpaceShipBase.h"
 
-#include "GameFramework/FloatingPawnMovement.h"
-
 
 ASpaceShipBase::ASpaceShipBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
 }
 
 void ASpaceShipBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CurrentSpeed = FMath::RandRange(MinSpeed, MaxSpeed);
 }
 
 void ASpaceShipBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	AddActorWorldOffset(GetActorForwardVector() * CurrentSpeed * DeltaTime);
 }
 

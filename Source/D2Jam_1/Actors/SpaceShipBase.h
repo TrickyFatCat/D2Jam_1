@@ -23,6 +23,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	TObjectPtr<UFloatingPawnMovement> MovementComponent = nullptr;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SpaceShip")
+	float MinSpeed = 50.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SpaceShip")
+	float MaxSpeed = 150.f;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "SpaceShip")
+	float CurrentSpeed = 0.f;
 };
