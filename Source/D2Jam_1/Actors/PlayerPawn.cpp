@@ -8,7 +8,6 @@
 #include "D2Jam_1/JamUtils.h"
 #include "D2Jam_1/Components/HitPointsComponent.h"
 #include "D2Jam_1/Components/PassengersCounterComponent.h"
-#include "D2Jam_1/Components/PassengersGeneratorComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -47,8 +46,13 @@ void APlayerPawn::BeginPlay()
 	}
 
 	ATrickyGameModeBase* GameMode = UTrickyGameModeLibrary::GetTrickyGameMode(this);
-	GameMode->OnGameStarted.AddUniqueDynamic(this, &APlayerPawn::HandleGameStarted);
-	GameMode->OnGameStopped.AddUniqueDynamic(this, &APlayerPawn::HandleGameStopped);
+
+	if (IsValid(GameMode))
+	{
+		GameMode->OnGameStarted.AddUniqueDynamic(this, &APlayerPawn::HandleGameStarted);
+		GameMode->OnGameStopped.AddUniqueDynamic(this, &APlayerPawn::HandleGameStopped);
+		GameMode->OnGameFinished.AddUniqueDynamic(this, &APlayerPawn::HandleGameFinished);
+	}
 
 	if (IsValid(MovementComponent))
 	{
@@ -101,10 +105,15 @@ void APlayerPawn::HandleGameStopped(EGameInactivityReason InactivityReason)
 	{
 		return;
 	}
-	
+
 	HitPointsComponent->ResetHitPointsToMax();
 	PassengersCounterComponent->ResetPassengers();
 	SetActorTransform(FTransform::Identity);
+}
+
+void APlayerPawn::HandleGameFinished(EGameResult GameResult)
+{
+	MovementComponent->SetComponentTickEnabled(false);
 }
 
 void APlayerPawn::RotateTowardsCursor(const float DeltaTime)

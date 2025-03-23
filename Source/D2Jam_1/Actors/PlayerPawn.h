@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerPawn.generated.h"
 
+enum class EGameResult : uint8;
 class UPassengersCounterComponent;
 enum class EGameInactivityReason : uint8;
 class UHitPointsComponent;
@@ -75,6 +76,9 @@ protected:
 
 	UFUNCTION()
 	void HandleGameStopped(EGameInactivityReason InactivityReason);
+
+	UFUNCTION()
+	void HandleGameFinished(EGameResult GameResult);
 
 private:
 	UPROPERTY()
