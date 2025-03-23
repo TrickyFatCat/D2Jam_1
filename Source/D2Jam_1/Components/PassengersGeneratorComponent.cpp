@@ -60,6 +60,13 @@ bool UPassengersGeneratorComponent::IncreaseCapacity(const int32 Amount)
 	return true;
 }
 
+EPlanetColor UPassengersGeneratorComponent::BoardPassenger()
+{
+	const EPlanetColor Passenger = Passengers.Pop();
+	OnPassengerBoarded.Broadcast(this, Passenger);
+	return Passenger;
+}
+
 bool UPassengersGeneratorComponent::AddRandomPassenger()
 {
 	if (Passengers.Num() >= PassengerCapacity)
@@ -88,6 +95,6 @@ bool UPassengersGeneratorComponent::AddRandomPassenger()
 	
 	const EPlanetColor PassengerColor = PassengerColors[ColorIndex];
 	Passengers.Add(PassengerColor);
-	OnNewPassengerAdded.Broadcast(this, PassengerColor);
+	OnPassengerGenerated.Broadcast(this, PassengerColor);
 	return true;
 }

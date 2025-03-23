@@ -10,7 +10,11 @@
 enum class EPlanetColor : uint8;
 class UPlanetColors;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNewPassengerAddedDynamicSignature,
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPassengerGeneratedDynamicSignature,
+                                             UPassengersGeneratorComponent*, Component,
+                                             EPlanetColor, PassengerColor);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPassengerBoardedDynamicSignature,
                                              UPassengersGeneratorComponent*, Component,
                                              EPlanetColor, PassengerColor);
 
@@ -27,8 +31,11 @@ protected:
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FOnNewPassengerAddedDynamicSignature OnNewPassengerAdded;
-	
+	FOnPassengerGeneratedDynamicSignature OnPassengerGenerated;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPassengerBoardedDynamicSignature OnPassengerBoarded;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	int32 DefaultPassengerCapacity = 12;
 
@@ -61,6 +68,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="PassengersGenerator")
 	bool IncreaseCapacity(const int32 Amount);
+
+	UFUNCTION(BlueprintCallable, Category="PassengersGenerator")
+	EPlanetColor BoardPassenger();
 
 protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetPassengerCapacity, Category="PassengersGenerator")
