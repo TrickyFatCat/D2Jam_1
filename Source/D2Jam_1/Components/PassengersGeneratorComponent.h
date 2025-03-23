@@ -18,6 +18,14 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPassengerBoardedDynamicSignature
                                              UPassengersGeneratorComponent*, Component,
                                              EPlanetColor, PassengerColor);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGameOverTimerStartedDynamicSignature,
+                                             UPassengersGeneratorComponent*, Component,
+                                             FTimerHandle, Timer);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGameOverTimerStoppedDynamicSignature,
+                                             UPassengersGeneratorComponent*, Component,
+                                             FTimerHandle, Timer);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class D2JAM_1_API UPassengersGeneratorComponent : public UActorComponent
 {
@@ -36,8 +44,14 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPassengerBoardedDynamicSignature OnPassengerBoarded;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnGameOverTimerStartedDynamicSignature OnGameOverTimerStarted;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnGameOverTimerStoppedDynamicSignature OnGameOverTimerStopped;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
-	int32 DefaultPassengerCapacity = 12;
+	int32 DefaultPassengerCapacity = 10;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	int32 MaxPossibleColors = 3;
@@ -47,6 +61,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	float DefaultGenerationDelay = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
+	float GameOverDelay = 10.f;
 
 	UFUNCTION()
 	bool IncrementPossibleColors();
@@ -97,6 +114,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	FTimerHandle GenerationTimerHandle;
 
+	UPROPERTY(BlueprintReadOnly)
+	FTimerHandle GameOverTimerHandle;
+
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Transient, Category="PassengersGenerator")
 	int32 ArrivedPassengers = 0;
 
@@ -105,4 +125,13 @@ protected:
 
 	UFUNCTION()
 	void HandleGenerationTimer();
+
+	UFUNCTION()
+	void StartGameOverTimer();
+
+	UFUNCTION()
+	void StopGameOverTimer();
+
+	UFUNCTION()
+	void HandleGameOverTimer();
 };

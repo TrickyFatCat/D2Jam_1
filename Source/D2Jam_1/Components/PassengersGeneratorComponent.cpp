@@ -3,6 +3,8 @@
 
 #include "PassengersGeneratorComponent.h"
 
+#include "TrickyGameModeBase.h"
+#include "TrickyGameModeLibrary.h"
 #include "D2Jam_1/Actors/PlanetsManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -75,12 +77,8 @@ void UPassengersGeneratorComponent::StopGenerator()
 
 	FTimerManager& TimerManager = World->GetTimerManager();
 
-	if (!TimerManager.IsTimerActive(GenerationTimerHandle))
-	{
-		return;
-	}
-
 	TimerManager.ClearTimer(GenerationTimerHandle);
+	TimerManager.ClearTimer(GameOverTimerHandle);
 }
 
 bool UPassengersGeneratorComponent::IncreaseCapacity(const int32 Amount)
@@ -98,6 +96,13 @@ EPlanetColor UPassengersGeneratorComponent::BoardPassenger()
 {
 	const EPlanetColor Passenger = Passengers.Pop();
 	ArrivedPassengers++;
+
+	if (Passengers.Num() <= PassengerCapacity)
+	{
+		StopGameOverTimer();
+		StartGenerator();
+	}
+
 	OnPassengerBoarded.Broadcast(this, Passenger);
 	return Passenger;
 }
@@ -131,16 +136,6 @@ bool UPassengersGeneratorComponent::AddRandomPassenger()
 	const EPlanetColor PassengerColor = PassengerColors[ColorIndex];
 	Passengers.Add(PassengerColor);
 	OnPassengerGenerated.Broadcast(this, PassengerColor);
-
-	if (Passengers.Num() < PassengerCapacity)
-	{
-		StartGenerator();
-	}
-	else
-	{
-		
-	}
-	
 	return true;
 }
 
@@ -150,9 +145,10 @@ void UPassengersGeneratorComponent::HandleGenerationTimer()
 
 	if (Passengers.Num() >= PassengerCapacity)
 	{
+		StartGameOverTimer();
 		return;
 	}
-	
+
 	UWorld* World = GetWorld();
 
 	if (!IsValid(World))
@@ -164,4 +160,45 @@ void UPassengersGeneratorComponent::HandleGenerationTimer()
 	FTimerDelegate Delegate;
 	Delegate.BindUFunction(this, FName("StartGenerator"));
 	TimerManager.SetTimerForNextTick(Delegate);
+}
+
+void UPassengersGeneratorComponent::StartGameOverTimer()
+{
+	UWorld* World = GetWorld();
+
+	if (!IsValid(World))
+	{
+		return;
+	}
+	FTimerManager& TimerManager = World->GetTimerManager();
+
+	if (TimerManager.IsTimerActive(GameOverTimerHandle))
+	{
+		return;
+	}
+
+	TimerManager.SetTimer(GameOverTimerHandle,
+	                      this,
+	                      &UPassengersGeneratorComponent::HandleGameOverTimer,
+	                      GameOverDelay);
+	OnGameOverTimerStarted.Broadcast(this, GameOverTimerHandle);
+}
+
+void UPassengersGeneratorComponent::StopGameOverTimer()
+{
+	UWorld* World = GetWorld();
+
+	if (!IsValid(World))
+	{
+		return;
+	}
+
+	FTimerManager& TimerManager = World->GetTimerManager();
+	TimerManager.ClearTimer(GameOverTimerHandle);
+	OnGameOverTimerStopped.Broadcast(this, GameOverTimerHandle);
+}
+
+void UPassengersGeneratorComponent::HandleGameOverTimer()
+{
+	UTrickyGameModeLibrary::FinishGame(this, EGameResult::None);
 }
