@@ -52,9 +52,12 @@ private:
 	void RandomizePlanets();
 
 	UFUNCTION()
-	void HandleGameStopped(EGameInactivityReason InactivityReason);
+	void HandleGameStarted();
 
 	UFUNCTION()
+	void HandleGameStopped(EGameInactivityReason InactivityReason);
+
+	UFUNCTION(BlueprintCallable, Category = "PlanetsManager")
 	bool ActivateNextPlanet();
 
 	UFUNCTION()

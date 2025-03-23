@@ -50,6 +50,7 @@ void APlanetsManager::BeginPlay()
 
 	if (IsValid(GameMode))
 	{
+		GameMode->OnGameStarted.AddUniqueDynamic(this, &APlanetsManager::HandleGameStarted);
 		GameMode->OnGameStopped.AddUniqueDynamic(this, &APlanetsManager::HandleGameStopped);
 	}
 }
@@ -86,6 +87,26 @@ void APlanetsManager::RandomizePlanets()
 	for (APlanetBase* Planet : Planets)
 	{
 		Planet->RandomizePlanet();
+	}
+}
+
+void APlanetsManager::HandleGameStarted()
+{
+	if (Planets.IsEmpty() || Planets.Num() < InitialActivePlanetsNum)
+	{
+		return;
+	}
+
+	for (int32 i = 0; i < InitialActivePlanetsNum; ++i)
+	{
+		APlanetBase* Planet = Planets[i];
+
+		if (!IsValid(Planet))
+		{
+			continue;
+		}
+		
+		IGameplayObjectInterface::Execute_ActivateGameplayObject(Planet, true);
 	}
 }
 
@@ -134,19 +155,14 @@ void APlanetsManager::ResetPlanetsState()
 {
 	CurrentActivePlanetsNum = InitialActivePlanetsNum;
 
-	for (int32 i = 0; i < Planets.Num(); ++i)
+	for (APlanetBase* Planet : Planets)
 	{
-		APlanetBase* Planet = Planets[i];
-
 		if (!IsValid(Planet))
 		{
 			continue;
 		}
 
-		const EGameplayObjectState NewState = i < CurrentActivePlanetsNum
-			                                      ? EGameplayObjectState::Active
-			                                      : EGameplayObjectState::Inactive;
-		IGameplayObjectInterface::Execute_ForceGameplayObjectState(Planet, NewState, true);
+		IGameplayObjectInterface::Execute_ForceGameplayObjectState(Planet, EGameplayObjectState::Inactive, true);
 		Planet->GetPassengersGeneratorComponent()->ResetPassengers();
 	}
 }
