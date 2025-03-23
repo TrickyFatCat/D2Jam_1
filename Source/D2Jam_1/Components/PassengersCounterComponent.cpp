@@ -3,8 +3,6 @@
 
 #include "PassengersCounterComponent.h"
 
-#include "TrickyPropertiesLibrary.h"
-
 
 UPassengersCounterComponent::UPassengersCounterComponent()
 {
@@ -26,6 +24,7 @@ bool UPassengersCounterComponent::AddPassenger(const EPlanetColor Passenger)
 	}
 
 	Passengers.Add(Passenger);
+	OnPassengerAdded.Broadcast(this, Passenger);
 	return true;
 }
 
@@ -41,6 +40,7 @@ int32 UPassengersCounterComponent::AddPassengers(const EPlanetColor Passenger, c
 	for (int32 i = 0; i < AddPassengersNum; i++)
 	{
 		Passengers.Add(Passenger);
+		OnPassengerAdded.Broadcast(this, Passenger);
 	}
 	
 	return AddPassengersNum;
@@ -54,8 +54,14 @@ bool UPassengersCounterComponent::RemovePassengers(const EPlanetColor Passenger)
 	}
 
 	const int32 RemovePassengersNum = Passengers.Remove(Passenger);
+	OnPassengerRemoved.Broadcast(this, Passenger, RemovePassengersNum);
 	TotalPassengers += RemovePassengersNum;
 	return true;
+}
+
+int32 UPassengersCounterComponent::GetRemainingCapacity() const
+{
+	return PassengersCapacity - Passengers.Num();
 }
 
 bool UPassengersCounterComponent::IncreasePassengerCapacity(const int32 Amount)
