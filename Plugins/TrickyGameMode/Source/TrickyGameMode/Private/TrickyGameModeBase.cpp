@@ -24,7 +24,7 @@ bool ATrickyGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpause
 {
 	if (Super::SetPause(PC, CanUnpauseDelegate))
 	{
-		PauseGame();
+		Execute_PauseGame(this);
 
 		if (LastState == EGameState::Inactive && CurrentInactivityReason == EGameInactivityReason::Preparation)
 		{
@@ -41,7 +41,7 @@ bool ATrickyGameModeBase::ClearPause()
 {
 	if (Super::ClearPause())
 	{
-		UnpauseGame();
+		Execute_UnpauseGame(this);
 
 		if (CurrentState == EGameState::Inactive && CurrentInactivityReason == EGameInactivityReason::Preparation)
 		{
