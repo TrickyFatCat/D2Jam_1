@@ -42,6 +42,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	int32 MaxPossibleColors = 3;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
+	UCurveFloat* GenerationDelayCurve = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
+	float DefaultGenerationDelay = 1.0f;
+
 	UFUNCTION()
 	bool IncrementPossibleColors();
 
@@ -66,9 +72,6 @@ public:
 	UFUNCTION()
 	void StopGenerator();
 
-	UFUNCTION()
-	void RestartGenerator();
-
 	UFUNCTION(BlueprintCallable, Category="PassengersGenerator")
 	bool IncreaseCapacity(const int32 Amount);
 
@@ -91,9 +94,15 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	EPlanetColor ExcludedColor = EPlanetColor::Red;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	FTimerHandle GenerationTimerHandle;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Transient, Category="PassengersGenerator")
+	int32 ArrivedPassengers = 0;
 
 	UFUNCTION(BlueprintCallable)
 	bool AddRandomPassenger();
+
+	UFUNCTION()
+	void HandleGenerationTimer();
 };
