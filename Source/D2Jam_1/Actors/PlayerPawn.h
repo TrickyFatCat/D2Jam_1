@@ -54,6 +54,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintGetter=GetRotationSpeed, Category = "Movement")
 	float RotationSpeed = 180.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+	UCurveFloat* SpeedProgressionCurve = nullptr;
 	
 	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetDesiredDirection, Category="Movement")
 	FVector DesiredDirection = FVector::ZeroVector;
@@ -89,5 +92,8 @@ private:
 
 	UFUNCTION()
 	void RotateTowardsCursor(const float DeltaTime);
+
+	UFUNCTION()
+	void HandleTotalPassengersIncreased(UPassengersCounterComponent* Component, int32 TotalPassengers);
 };
 

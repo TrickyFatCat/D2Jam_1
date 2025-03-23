@@ -58,6 +58,13 @@ void APlayerPawn::BeginPlay()
 	{
 		MovementComponent->SetComponentTickEnabled(false);
 	}
+
+	if (IsValid(PassengersCounterComponent))
+	{
+		PassengersCounterComponent->OnTotalPassengersIncreased.AddUniqueDynamic(this,
+			&APlayerPawn::HandleTotalPassengersIncreased);
+		HandleTotalPassengersIncreased(PassengersCounterComponent, 0);
+	}
 }
 
 void APlayerPawn::Tick(float DeltaTime)
@@ -129,4 +136,15 @@ void APlayerPawn::RotateTowardsCursor(const float DeltaTime)
 	                                                              DeltaTime,
 	                                                              RotationSpeed);
 	SetActorRotation(NewRotation);
+}
+
+void APlayerPawn::HandleTotalPassengersIncreased(UPassengersCounterComponent* Component, int32 TotalPassengers)
+{
+	if (!IsValid(SpeedProgressionCurve) || !IsValid(MovementComponent))
+	{
+		return;
+	}
+
+	const float NewSpeed = SpeedProgressionCurve->GetFloatValue(TotalPassengers);
+	MovementComponent->MaxSpeed = NewSpeed;
 }
