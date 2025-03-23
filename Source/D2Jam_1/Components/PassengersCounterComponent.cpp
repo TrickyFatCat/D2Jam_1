@@ -56,6 +56,7 @@ bool UPassengersCounterComponent::RemovePassengers(const EPlanetColor Passenger)
 	const int32 RemovePassengersNum = Passengers.Remove(Passenger);
 	OnPassengerRemoved.Broadcast(this, Passenger, RemovePassengersNum);
 	TotalPassengers += RemovePassengersNum;
+	OnTotalPassengersIncreased.Broadcast(this, TotalPassengers);
 	return true;
 }
 

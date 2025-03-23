@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "PlanetsManager.generated.h"
 
+class UPassengersCounterComponent;
 enum class EGameResult : uint8;
 enum class EPlanetColor : uint8;
 enum class EGameInactivityReason : uint8;
@@ -42,6 +43,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlanetsManager")
 	UPlanetColors* PlanetColors = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlanetsManager")
+	UCurveFloat* PlanetsActivationCurve = nullptr;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlanetsManager", meta = (ClampMin = "2", UIMin = "2"))
 	int32 InitialActivePlanetsNum = 2;
 
@@ -60,6 +64,9 @@ private:
 
 	UFUNCTION()
 	void HandleGameFinished(EGameResult GameResult);
+
+	UFUNCTION()
+	void HandleTotalPassengersIncreased(UPassengersCounterComponent* Component, int32 TotalPassengers);
 
 	UFUNCTION(BlueprintCallable, Category = "PlanetsManager")
 	bool ActivateNextPlanet();

@@ -8,6 +8,7 @@
 #include "TrickyGameModeBase.h"
 #include "TrickyGameModeLibrary.h"
 #include "Algo/RandomShuffle.h"
+#include "D2Jam_1/Components/PassengersCounterComponent.h"
 #include "D2Jam_1/Components/PassengersGeneratorComponent.h"
 #include "D2Jam_1/Misc/PlanetColors.h"
 #include "Kismet/GameplayStatics.h"
@@ -53,6 +54,18 @@ void APlanetsManager::BeginPlay()
 		GameMode->OnGameStarted.AddUniqueDynamic(this, &APlanetsManager::HandleGameStarted);
 		GameMode->OnGameStopped.AddUniqueDynamic(this, &APlanetsManager::HandleGameStopped);
 		GameMode->OnGameFinished.AddUniqueDynamic(this, &APlanetsManager::HandleGameFinished);
+	}
+
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+
+	if (IsValid(PlayerPawn))
+	{
+		UPassengersCounterComponent* CounterComponent = PlayerPawn->GetComponentByClass<UPassengersCounterComponent>();
+		
+		if (IsValid(CounterComponent))
+		{
+			CounterComponent->OnTotalPassengersIncreased.AddUniqueDynamic(this, &APlanetsManager::HandleTotalPassengersIncreased);
+		}
 	}
 }
 
@@ -133,6 +146,33 @@ void APlanetsManager::HandleGameFinished(EGameResult GameResult)
 
 		IGameplayObjectInterface::Execute_DeactivateGameplayObject(Planet, true);
 	}
+}
+
+void APlanetsManager::HandleTotalPassengersIncreased(UPassengersCounterComponent* Component, int32 TotalPassengers)
+{
+	if (CurrentActivePlanetsNum >= Planets.Num())
+	{
+		return;
+	}
+	
+	bool bShouldActivatePlanet = false;
+
+	if (!IsValid(PlanetsActivationCurve))
+	{
+		bShouldActivatePlanet = true;
+	}
+	else
+	{
+		const int32 ActivationProgress = PlanetsActivationCurve->GetFloatValue(TotalPassengers);
+		bShouldActivatePlanet = ActivationProgress > CurrentActivePlanetsNum;
+	}
+
+	if (!bShouldActivatePlanet)
+	{
+		return;
+	}
+
+	ActivateNextPlanet();
 }
 
 bool APlanetsManager::ActivateNextPlanet()

@@ -14,9 +14,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPassengerAddedDynamicSignature,
                                              EPlanetColor, Passenger);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPassengerRemovedDynamicSignature,
+                                               UPassengersCounterComponent*, Component,
+                                               EPlanetColor, Passenger,
+                                               int32, Num);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTotalPassengersIncreasedDynamicDelegate,
                                              UPassengersCounterComponent*, Component,
-                                             EPlanetColor, Passenger,
-                                             int32, Num);
+                                             int32, TotalPassengersNum);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class D2JAM_1_API UPassengersCounterComponent : public UActorComponent
@@ -35,7 +39,10 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnPassengerRemovedDynamicSignature OnPassengerRemoved;
-	
+
+	UPROPERTY(BlueprintAssignable)
+	FOnTotalPassengersIncreasedDynamicDelegate OnTotalPassengersIncreased;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersCounter")
 	int32 DefaultPassengersCapacity = 10;
 
