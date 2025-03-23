@@ -106,6 +106,7 @@ void APlayerPawn::HandleGameStopped(EGameInactivityReason InactivityReason)
 		return;
 	}
 
+	MovementComponent->Velocity = FVector::ZeroVector;
 	HitPointsComponent->ResetHitPointsToMax();
 	PassengersCounterComponent->ResetPassengers();
 	SetActorTransform(FTransform::Identity);

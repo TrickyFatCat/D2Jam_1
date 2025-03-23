@@ -8,7 +8,7 @@ public class D2Jam_1 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "TrickyProperties", "TrickyGameMode", "TrickyGameplayObjects"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "TrickyProperties", "TrickyGameMode", "TrickyGameplayObjects", "TrickyUserInterface"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
