@@ -31,6 +31,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Planet")
 	void SetPlanetColor(EPlanetColor NewPlanetColor, FLinearColor NewColor);
 
+	UFUNCTION(BlueprintGetter)
+	EPlanetColor GetPlanetColor() const { return PlanetColor; }
+
+	UFUNCTION(BlueprintGetter)
+	UPassengersGeneratorComponent* GetPassengersGeneratorComponent() const { return PassengersGeneratorComponent; }
+
 	UFUNCTION(BlueprintCallable, Category = "Planet")
 	void RandomizePlanet();
 
@@ -38,13 +44,13 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USphereComponent> TriggerComponent = nullptr;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetPassengersGeneratorComponent, Category = "Components")
 	TObjectPtr<UPassengersGeneratorComponent> PassengersGeneratorComponent = nullptr;
 
 	UPROPERTY(VisibleInstanceOnly, Category="Planet")
 	UPlanetColors* PlanetColors = nullptr;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Planet")
+	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetPlanetColor, Category = "Planet")
 	EPlanetColor PlanetColor = EPlanetColor::Red;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Planet")
