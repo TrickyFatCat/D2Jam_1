@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	int32 DefaultPassengerCapacity = 12;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="PassengersGenerator")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="PassengersGenerator")
 	int32 MaxPossibleColors = 3;
 
 	UFUNCTION()
