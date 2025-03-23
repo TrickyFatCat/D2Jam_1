@@ -29,6 +29,23 @@ bool UPassengersCounterComponent::AddPassenger(const EPlanetColor Passenger)
 	return true;
 }
 
+int32 UPassengersCounterComponent::AddPassengers(const EPlanetColor Passenger, const int32 Amount)
+{
+	if (Passengers.Num() >= PassengersCapacity)
+	{
+		return 0;
+	}
+
+	const int32 AddPassengersNum = FMath::Min(Amount, PassengersCapacity - Passengers.Num());
+
+	for (int32 i = 0; i < AddPassengersNum; i++)
+	{
+		Passengers.Add(Passenger);
+	}
+	
+	return AddPassengersNum;
+}
+
 bool UPassengersCounterComponent::RemovePassengers(const EPlanetColor Passenger)
 {
 	if (Passengers.IsEmpty() || !Passengers.Contains(Passenger))

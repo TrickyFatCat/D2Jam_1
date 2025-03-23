@@ -33,6 +33,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool AddPassenger(const EPlanetColor Passenger);
 
+	UFUNCTION(BlueprintCallable)
+	int32 AddPassengers(const EPlanetColor Passenger, const int32 Amount);
+
 	UFUNCTION(BlueprintCallable, Category="PassengersCounter")
 	bool RemovePassengers(const EPlanetColor Passenger);
 	
