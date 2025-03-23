@@ -52,6 +52,7 @@ void APlanetsManager::BeginPlay()
 	{
 		GameMode->OnGameStarted.AddUniqueDynamic(this, &APlanetsManager::HandleGameStarted);
 		GameMode->OnGameStopped.AddUniqueDynamic(this, &APlanetsManager::HandleGameStopped);
+		GameMode->OnGameFinished.AddUniqueDynamic(this, &APlanetsManager::HandleGameFinished);
 	}
 }
 
@@ -121,6 +122,19 @@ inline void APlanetsManager::HandleGameStopped(EGameInactivityReason InactivityR
 	ResetPlanetsState();
 }
 
+void APlanetsManager::HandleGameFinished(EGameResult GameResult)
+{
+	for (APlanetBase* Planet : Planets)
+	{
+		if (!IsValid(Planet))
+		{
+			continue;
+		}
+
+		IGameplayObjectInterface::Execute_DeactivateGameplayObject(Planet, true);
+	}
+}
+
 bool APlanetsManager::ActivateNextPlanet()
 {
 	if (CurrentActivePlanetsNum >= Planets.Num())
@@ -162,7 +176,7 @@ void APlanetsManager::ResetPlanetsState()
 			continue;
 		}
 
-		IGameplayObjectInterface::Execute_ForceGameplayObjectState(Planet, EGameplayObjectState::Inactive, true);
+		IGameplayObjectInterface::Execute_DeactivateGameplayObject(Planet, true);
 		Planet->GetPassengersGeneratorComponent()->ResetPassengers();
 	}
 }

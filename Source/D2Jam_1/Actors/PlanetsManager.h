@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "PlanetsManager.generated.h"
 
+enum class EGameResult : uint8;
 enum class EPlanetColor : uint8;
 enum class EGameInactivityReason : uint8;
 class UPlanetColors;
@@ -57,9 +58,13 @@ private:
 	UFUNCTION()
 	void HandleGameStopped(EGameInactivityReason InactivityReason);
 
+	UFUNCTION()
+	void HandleGameFinished(EGameResult GameResult);
+
 	UFUNCTION(BlueprintCallable, Category = "PlanetsManager")
 	bool ActivateNextPlanet();
 
 	UFUNCTION()
 	void ResetPlanetsState();
 };
+
