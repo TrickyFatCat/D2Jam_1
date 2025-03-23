@@ -8,6 +8,7 @@
 #include "TrickyGameModeBase.h"
 #include "TrickyGameModeLibrary.h"
 #include "Algo/RandomShuffle.h"
+#include "D2Jam_1/Components/PassengersGeneratorComponent.h"
 #include "D2Jam_1/Misc/PlanetColors.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -106,21 +107,33 @@ bool APlanetsManager::ActivateNextPlanet()
 		return false;
 	}
 
-	CurrentActivePlanetsNum++;
-	APlanetBase* Planet = Planets[CurrentActivePlanetsNum - 1];
+	APlanetBase* NextPlanet = Planets[CurrentActivePlanetsNum - 1];
 
-	if (!IsValid(Planet))
+	if (!IsValid(NextPlanet) || !IGameplayObjectInterface::Execute_ActivateGameplayObject(NextPlanet, true))
 	{
 		return false;
 	}
-	return IGameplayObjectInterface::Execute_ActivateGameplayObject(Planet, true);
+
+	CurrentActivePlanetsNum++;
+	OnPlanetActivated.Broadcast(this, NextPlanet->GetPlanetColor(), CurrentActivePlanetsNum);
+
+	for (const APlanetBase* Planet : Planets)
+	{
+		if (!IsValid(Planet))
+		{
+			continue;
+		}
+
+		Planet->GetPassengersGeneratorComponent()->IncrementPossibleColors();
+	}
+	
+	return true;
 }
 
 void APlanetsManager::ResetPlanetsState()
 {
 	CurrentActivePlanetsNum = InitialActivePlanetsNum;
 
-	Algo::RandomShuffle(Planets);
 	for (int32 i = 0; i < Planets.Num(); ++i)
 	{
 		APlanetBase* Planet = Planets[i];

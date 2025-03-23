@@ -6,9 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "PlanetsManager.generated.h"
 
+enum class EPlanetColor : uint8;
 enum class EGameInactivityReason : uint8;
 class UPlanetColors;
 class APlanetBase;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPlanetActivatedDynamicSignature,
+                                             APlanetsManager*, Manager,
+                                             EPlanetColor, PlanetColor,
+                                             int32, ActivePlanetsNum);
 
 UCLASS()
 class D2JAM_1_API APlanetsManager : public AActor
@@ -21,6 +27,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnPlanetActivatedDynamicSignature OnPlanetActivated;
+	
+	UFUNCTION(BlueprintGetter, Category = "PlanetsManager")
+	int32 GetCurrentActivePlanetsNum() const { return CurrentActivePlanetsNum; }
+
+protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Components")
 	TArray<APlanetBase*> Planets;
 
@@ -30,7 +44,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlanetsManager", meta = (ClampMin = "2", UIMin = "2"))
 	int32 InitialActivePlanetsNum = 2;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "PlanetsManager")
+	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetCurrentActivePlanetsNum, Category = "PlanetsManager")
 	int32 CurrentActivePlanetsNum = 2;
 
 private:
