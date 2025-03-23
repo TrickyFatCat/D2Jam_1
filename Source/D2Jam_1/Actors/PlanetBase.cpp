@@ -4,7 +4,9 @@
 #include "PlanetBase.h"
 
 #include "Components/SphereComponent.h"
+#include "D2Jam_1/Components/PassengersCounterComponent.h"
 #include "D2Jam_1/Components/PassengersGeneratorComponent.h"
+#include "GameplayObject/GameplayObjectStateControllerComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -24,6 +26,7 @@ void APlanetBase::BeginPlay()
 	Super::BeginPlay();
 
 	InitialLocation = GetActorLocation();
+	TriggerComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &APlanetBase::HandleTriggerOverlap);
 }
 
 void APlanetBase::Tick(float DeltaTime)
@@ -71,16 +74,55 @@ void APlanetBase::HandleStateChanged(UGameplayObjectStateControllerComponent* Co
                                      EGameplayObjectState NewState,
                                      bool bChangedImmediately)
 {
-	switch (NewState) {
+	switch (NewState)
+	{
 	case EGameplayObjectState::Active:
 		PassengersGeneratorComponent->StartGenerator();
+		TriggerComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		break;
 	case EGameplayObjectState::Inactive:
 		PassengersGeneratorComponent->StopGenerator();
+		TriggerComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		break;
 	case EGameplayObjectState::Disabled:
 		break;
 	case EGameplayObjectState::Transition:
 		break;
+	}
+}
+
+void APlanetBase::HandleTriggerOverlap(UPrimitiveComponent* OverlappedComponent,
+                                       AActor* OtherActor,
+                                       UPrimitiveComponent* OtherComp,
+                                       int32 OtherBodyIndex,
+                                       bool bFromSweep,
+                                       const FHitResult& SweepResult)
+{
+	if (!IsValid(OtherActor))
+	{
+		return;
+	}
+
+	UPassengersCounterComponent* Component = Cast<UPassengersCounterComponent>(OtherActor->GetComponentByClass(UPassengersCounterComponent::StaticClass()));
+
+	if (!IsValid(Component))
+	{
+		return;
+	}
+
+	Component->RemovePassengers(PlanetColor);
+	const int32 RemainingCapacity = Component->GetRemainingCapacity();
+	const int32 PassengersNum = PassengersGeneratorComponent->GetPassengers().Num();
+	const int32 PassengersToBoard = FMath::Min(RemainingCapacity, PassengersNum);
+
+	if (PassengersToBoard <= 0)
+	{
+		return;
+	}
+	
+	for (int32 i = 0; i < PassengersToBoard; ++i)
+	{
+		EPlanetColor Passenger = PassengersGeneratorComponent->BoardPassenger();
+		Component->AddPassenger(Passenger);
 	}
 }
