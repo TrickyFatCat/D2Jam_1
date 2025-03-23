@@ -42,6 +42,7 @@ void UPassengersGeneratorComponent::ResetPassengers()
 	PassengerCapacity = DefaultPassengerCapacity;
 	Passengers.Empty();
 	ArrivedPassengers = 0;
+	CurrentPossibleColors = 1;
 }
 
 void UPassengersGeneratorComponent::StartGenerator()
