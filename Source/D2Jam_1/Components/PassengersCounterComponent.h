@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PassengersCounter")
 	int32 GetRemainingCapacity() const;
 
+	UFUNCTION()
+	void ResetPassengers();
+
 protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetTotalPassengers, Transient, Category="PassengersCounter")
 	int32 TotalPassengers = 0;

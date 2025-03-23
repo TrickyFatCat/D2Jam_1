@@ -126,7 +126,7 @@ bool APlanetsManager::ActivateNextPlanet()
 
 		Planet->GetPassengersGeneratorComponent()->IncrementPossibleColors();
 	}
-	
+
 	return true;
 }
 
@@ -147,5 +147,6 @@ void APlanetsManager::ResetPlanetsState()
 			                                      ? EGameplayObjectState::Active
 			                                      : EGameplayObjectState::Inactive;
 		IGameplayObjectInterface::Execute_ForceGameplayObjectState(Planet, NewState, true);
+		Planet->GetPassengersGeneratorComponent()->ResetPassengers();
 	}
 }

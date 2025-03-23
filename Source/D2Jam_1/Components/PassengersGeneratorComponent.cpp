@@ -35,6 +35,12 @@ bool UPassengersGeneratorComponent::IncrementPossibleColors()
 	return true;
 }
 
+void UPassengersGeneratorComponent::ResetPassengers()
+{
+	PassengerCapacity = DefaultPassengerCapacity;
+	Passengers.Empty();
+}
+
 void UPassengersGeneratorComponent::StartGenerator()
 {
 }
@@ -45,7 +51,6 @@ void UPassengersGeneratorComponent::StopGenerator()
 
 void UPassengersGeneratorComponent::RestartGenerator()
 {
-	PassengerCapacity = DefaultPassengerCapacity;
 	StartGenerator();
 }
 

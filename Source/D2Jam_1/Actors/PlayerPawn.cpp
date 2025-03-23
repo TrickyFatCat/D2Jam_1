@@ -21,7 +21,8 @@ APlayerPawn::APlayerPawn()
 
 	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
 	HitPointsComponent = CreateDefaultSubobject<UHitPointsComponent>(TEXT("HitPointsComponent"));
-	PassengersCounterComponent = CreateDefaultSubobject<UPassengersCounterComponent>(TEXT("PassengersCounterComponent"));
+	PassengersCounterComponent = CreateDefaultSubobject<
+		UPassengersCounterComponent>(TEXT("PassengersCounterComponent"));
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	SetRootComponent(Root);
@@ -35,7 +36,7 @@ void APlayerPawn::OnConstruction(const FTransform& Transform)
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	OnTakeAnyDamage.AddDynamic(this, &APlayerPawn::HandleAnyDamage);
 	PlayerController = Cast<APlayerController>(GetController());
 	CameraManager = PlayerController->PlayerCameraManager;
@@ -48,7 +49,7 @@ void APlayerPawn::BeginPlay()
 	ATrickyGameModeBase* GameMode = UTrickyGameModeLibrary::GetTrickyGameMode(this);
 	GameMode->OnGameStarted.AddUniqueDynamic(this, &APlayerPawn::HandleGameStarted);
 	GameMode->OnGameStopped.AddUniqueDynamic(this, &APlayerPawn::HandleGameStopped);
-	
+
 	if (IsValid(MovementComponent))
 	{
 		MovementComponent->SetComponentTickEnabled(false);
@@ -100,8 +101,10 @@ void APlayerPawn::HandleGameStopped(EGameInactivityReason InactivityReason)
 	{
 		return;
 	}
-		HitPointsComponent->ResetHitPointsToMax();
-		SetActorTransform(FTransform::Identity);
+	
+	HitPointsComponent->ResetHitPointsToMax();
+	PassengersCounterComponent->ResetPassengers();
+	SetActorTransform(FTransform::Identity);
 }
 
 void APlayerPawn::RotateTowardsCursor(const float DeltaTime)

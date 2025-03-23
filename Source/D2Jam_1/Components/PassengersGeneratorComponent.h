@@ -52,6 +52,9 @@ public:
 	TArray<EPlanetColor> GetPassengers() const { return Passengers; }
 
 	UFUNCTION()
+	void ResetPassengers();
+
+	UFUNCTION()
 	void SetPlanetColors(UPlanetColors* Value) { PlanetColors = Value; }
 
 	UFUNCTION()
@@ -77,7 +80,7 @@ protected:
 	int32 PassengerCapacity = 12;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="PassengersGenerator")
-	int32 CurrentPossibleColors = 2;
+	int32 CurrentPossibleColors = 1;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetPassengers, Category="PassengersGenerator")
 	TArray<EPlanetColor> Passengers;

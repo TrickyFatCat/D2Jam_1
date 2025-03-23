@@ -64,6 +64,13 @@ int32 UPassengersCounterComponent::GetRemainingCapacity() const
 	return PassengersCapacity - Passengers.Num();
 }
 
+void UPassengersCounterComponent::ResetPassengers()
+{
+	TotalPassengers = 0;
+	Passengers.Empty();
+	PassengersCapacity = DefaultPassengersCapacity;
+}
+
 bool UPassengersCounterComponent::IncreasePassengerCapacity(const int32 Amount)
 {
 	if (Amount <= 0)
