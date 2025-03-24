@@ -36,3 +36,14 @@ bool UJamUtils::ProjectMouseToWorld(const APlayerController* PlayerController,
 	MousePosition = Intersection;
 	return true;
 }
+
+int32 UJamUtils::CountPassengers(const TArray<EPlanetColor>& Passengers, EPlanetColor Color)
+{
+	auto Predicate = [Color](const EPlanetColor Passenger)
+	{
+		return Passenger == Color;
+	};
+
+	const int32 Result = Passengers.FilterByPredicate(Predicate).Num();
+	return Result;
+}

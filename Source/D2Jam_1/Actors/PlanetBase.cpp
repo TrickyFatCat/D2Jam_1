@@ -15,7 +15,7 @@ APlanetBase::APlanetBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TriggerComponent = CreateDefaultSubobject<USphereComponent>(TEXT("TriggerComponent"));
-	TriggerComponent->SetupAttachment(MeshComponent);
+	TriggerComponent->SetupAttachment(GetRootComponent());
 
 	PassengersGeneratorComponent = CreateDefaultSubobject<
 		UPassengersGeneratorComponent>("PassengersGeneratorComponent");
