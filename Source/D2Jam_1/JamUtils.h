@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "JamUtils.generated.h"
 
+enum class EPlanetColor : uint8;
 /**
  * 
  */
@@ -20,4 +21,7 @@ public:
 	                                const APlayerCameraManager* CameraManager,
 	                                const float Distance,
 	                                FVector& MousePosition);
+
+	UFUNCTION(BlueprintPure, Category=JamUtils)
+	static int32 CountPassengers(const TArray<EPlanetColor>& Passengers, EPlanetColor Color);
 };
