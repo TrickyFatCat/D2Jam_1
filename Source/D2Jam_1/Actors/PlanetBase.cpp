@@ -75,6 +75,12 @@ void APlanetBase::RandomizePlanet()
 		SetActorLocation(NewLocation);
 	}
 
+	if (StateComponent->GetCurrentState() == EGameplayObjectState::Inactive)
+	{
+		TriggerComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		MeshComponent->SetMaterial(0, InactiveMaterial);
+	}
+	
 	HandlePlanetRandomized();
 }
 
@@ -82,15 +88,20 @@ void APlanetBase::HandleStateChanged(UGameplayObjectStateControllerComponent* Co
                                      EGameplayObjectState NewState,
                                      bool bChangedImmediately)
 {
+	UMaterialInterface* NewMaterial = nullptr;
+	
 	switch (NewState)
 	{
 	case EGameplayObjectState::Active:
 		PassengersGeneratorComponent->StartGenerator();
 		TriggerComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		NewMaterial = *PlanetMaterials.Find(PlanetColor);
+		MeshComponent->SetMaterial(0, NewMaterial);
 		break;
 	case EGameplayObjectState::Inactive:
 		PassengersGeneratorComponent->StopGenerator();
 		TriggerComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		MeshComponent->SetMaterial(0, InactiveMaterial);
 		break;
 	case EGameplayObjectState::Disabled:
 		break;
@@ -111,7 +122,8 @@ void APlanetBase::HandleTriggerOverlap(UPrimitiveComponent* OverlappedComponent,
 		return;
 	}
 
-	UPassengersCounterComponent* Component = Cast<UPassengersCounterComponent>(OtherActor->GetComponentByClass(UPassengersCounterComponent::StaticClass()));
+	UPassengersCounterComponent* Component = Cast<UPassengersCounterComponent>(
+		OtherActor->GetComponentByClass(UPassengersCounterComponent::StaticClass()));
 
 	if (!IsValid(Component))
 	{
@@ -122,7 +134,7 @@ void APlanetBase::HandleTriggerOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		HandlePassengersArrived(OtherActor);
 	}
-	
+
 	const int32 RemainingCapacity = Component->GetRemainingCapacity();
 	const int32 PassengersNum = PassengersGeneratorComponent->GetPassengers().Num();
 	const int32 PassengersToBoard = FMath::Min(RemainingCapacity, PassengersNum);
@@ -131,7 +143,7 @@ void APlanetBase::HandleTriggerOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		return;
 	}
-	
+
 	for (int32 i = 0; i < PassengersToBoard; ++i)
 	{
 		EPlanetColor Passenger = PassengersGeneratorComponent->BoardPassenger();

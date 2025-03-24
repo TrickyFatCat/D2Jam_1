@@ -34,6 +34,9 @@ public:
 		{EPlanetColor::Purple, nullptr}
 	};
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Planet")
+	UMaterialInterface* InactiveMaterial = nullptr;
+
 	UFUNCTION()
 	void SetPlanetColors(UPlanetColors* NewPlanetColors);
 
