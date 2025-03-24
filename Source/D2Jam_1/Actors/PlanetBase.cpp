@@ -118,7 +118,11 @@ void APlanetBase::HandleTriggerOverlap(UPrimitiveComponent* OverlappedComponent,
 		return;
 	}
 
-	Component->RemovePassengers(PlanetColor);
+	if (Component->RemovePassengers(PlanetColor))
+	{
+		HandlePassengersArrived(OtherActor);
+	}
+	
 	const int32 RemainingCapacity = Component->GetRemainingCapacity();
 	const int32 PassengersNum = PassengersGeneratorComponent->GetPassengers().Num();
 	const int32 PassengersToBoard = FMath::Min(RemainingCapacity, PassengersNum);
