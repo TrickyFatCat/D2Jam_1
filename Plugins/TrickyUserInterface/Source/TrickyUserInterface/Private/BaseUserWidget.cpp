@@ -43,7 +43,7 @@ void UBaseUserWidget::OnAnimationFinished_Implementation(const UWidgetAnimation*
 		SetVisibility(DefaultVisibility); // In case, of rapid change of the state.
 		OnShowed.Broadcast();
 	}
-	else
+	else if (Animation == HideAnimation)
 	{
 		SetVisibility(ESlateVisibility::Hidden);
 		OnHidden.Broadcast();
