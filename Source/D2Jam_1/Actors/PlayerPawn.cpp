@@ -65,6 +65,8 @@ void APlayerPawn::BeginPlay()
 			&APlayerPawn::HandleTotalPassengersIncreased);
 		HandleTotalPassengersIncreased(PassengersCounterComponent, 0);
 	}
+
+	InitialTransform = GetActorTransform();
 }
 
 void APlayerPawn::Tick(float DeltaTime)
@@ -116,7 +118,7 @@ void APlayerPawn::HandleGameStopped(EGameInactivityReason InactivityReason)
 	MovementComponent->Velocity = FVector::ZeroVector;
 	HitPointsComponent->ResetHitPointsToMax();
 	PassengersCounterComponent->ResetPassengers();
-	SetActorTransform(FTransform::Identity);
+	SetActorTransform(InitialTransform);
 	HandleTotalPassengersIncreased(PassengersCounterComponent, 0);
 }
 

@@ -64,6 +64,9 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintGetter=GetMouseWorldPosition, Category="Movement")
 	FVector MouseWorldPosition = FVector::ZeroVector;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Movement")
+	FTransform InitialTransform = FTransform::Identity;
+
 	UFUNCTION()
 	void HandleAnyDamage(AActor* DamagedActor,
 	                     float Damage,
